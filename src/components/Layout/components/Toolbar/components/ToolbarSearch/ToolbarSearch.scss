@@ -1,0 +1,44 @@
+@import '../../../../../App/styles/variables';
+
+.toolbar-search {
+  position: relative;
+
+  > .fa {
+    position: absolute;
+    left: .8rem;
+    top: 8px;
+    bottom: 5px;
+    font-size: 18px;
+    color: rgba(#fff, .8);
+  }
+
+  > .field {
+    padding-left: 2.5rem;
+    max-width: 400px;
+    background: rgba(#fff, .25);
+    color: rgba(#fff, .8);
+
+    &::placeholder {
+      color: rgba(#fff, .8);
+    }
+
+    &:hover {
+      background: rgba(#fff, .3);
+    }
+
+    &:focus {
+      outline: none;
+      background: #fff;
+      transition: 0.1s ease-in-out;
+      color: $text-base;
+
+      &::placeholder {
+        color: rgba(#000, .5);
+      }
+
+      + .fa {
+        color: rgba(#000, .5);
+      }
+    }
+  }
+}

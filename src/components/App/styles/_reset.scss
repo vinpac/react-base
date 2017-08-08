@@ -1,0 +1,37 @@
+@import 'variables';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-size: $font-size-base;
+  color: $text-base;
+}
+
+body {
+  line-height: $font-line-height-base;
+  font-family: $font-family-base;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.3;
+}
+
+input,
+button,
+textarea {
+  color: $text-base;
+  font-family: $font-family-base;
+}
+
+a {
+  color: $color-primary;
+  text-decoration: none;
+}
+
+.pull-xs-right {
+  float: right;
+}

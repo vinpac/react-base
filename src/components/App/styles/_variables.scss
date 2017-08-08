@@ -1,0 +1,34 @@
+// Primary colors
+$color-primary: #0069FF;
+$color-primary-dark: darken($color-primary, 10%);
+$color-accent: #0077F5;
+
+// Alternative colors
+$color-info: #FFC145;
+$color-success: #24B47E;
+$color-warning: #ff5252;
+
+// Text colors
+$text-base: #444;
+$text-muted: #7E828B;
+$text-muted-dark: #5A606E;
+$text-anchor: $color-primary;
+
+// Fonts
+$font-size-base: 16px;
+$font-line-height-base: 1.5;
+$font-family-base: Roboto, Helvetica, Arial, sans-serif;
+$font-weight-normal: normal;
+
+// Font weight
+$font-semibold: 500;
+
+
+// Link
+$link-color: #367ce0;
+$link-decoration: none;
+$link-hover-color: darken($link-color, 15%);
+$link-hover-decoration: underline;
+
+// Utils
+$border-radius: 2px;

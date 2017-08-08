@@ -1,0 +1,65 @@
+@import '../variables';
+@import 'variables';
+
+.field {
+  color: $text-base;
+  font-family: $font-family-base;
+  border-radius: $border-radius;
+  border: 1px solid $field-border-color;
+  font-size: 16px;
+  padding: $field-padding;
+  display: block;
+  width: 100%;
+  background: $field-bg;
+
+  &:hover {
+    border-color: darken($field-border-color, 10%)
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $field-highlight;
+  }
+
+  &:disabled {
+    background: #f6f6f6;
+  }
+
+  &::placeholder {
+    color: rgba(#000, .5)
+  }
+}
+
+.field.borderless {
+  border-color: transparent;
+}
+
+.field-legend {
+  font-size: .875em;
+  display: block;
+  color: $text-muted;
+  margin-top: .5rem;
+}
+
+.field-group {
+  label {
+    margin-bottom: .5rem;
+    display: inline-block;
+  }
+
+  &.warning {
+    label,
+    .field,
+    .field-legend, {
+      color: $color-warning;
+    }
+
+    .field {
+      border-color: $color-warning;
+    }
+  }
+
+  + .field-group {
+    margin-top: 1rem;
+  }
+}
