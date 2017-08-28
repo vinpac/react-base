@@ -1,18 +1,24 @@
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
+import webpack from 'webpack'
 import nodeExternals from 'webpack-node-externals'
 import pkg from '../package.json'
 import overrideRules from './lib/overrideRules'
-import webpack from 'webpack'
 
-const isDebug = true
-const isVerbose = false
+const isDebug = !process.argv.includes('--release')
+const isVerbose = process.argv.includes('--verbose')
 
 const reScript = /\.jsx?$/
 const reStyle = /\.(css|less|scss|sss)$/
 const reImage = /\.(bmp|gif|jpe?g|png|svg)$/
 const staticAssetName = isDebug ? '[path][name].[ext]?[hash:8]' : '[hash:8].[ext]'
+
+const extractTextPlugin = new ExtractTextPlugin({
+  filename: 'style.css',
+  allChunks: true,
+})
 
 const config = {
   context: path.resolve(__dirname, '..'),
@@ -22,15 +28,11 @@ const config = {
     publicPath: '/assets/',
     pathinfo: isVerbose,
     filename: isDebug ? '[name].js' : '[name].[chunkhash:8].js',
-    chunkFilename: isDebug ? '[name].chunk.js' : '[name].[chunkhash:8].chunk.js',
-    devtoolModuleFilenameTemplate: info => path.resolve(info.absoluteResourcePath),
-  },
-
-  // Turn off performance hints during development because we don't do any
-  // splitting or minification in interest of speed. These warnings become
-  // cumbersome.
-  performance: {
-    hints: isDebug ? false : 'warning',
+    chunkFilename: isDebug
+      ? '[name].chunk.js'
+      : '[name].[chunkhash:8].chunk.js',
+    devtoolModuleFilenameTemplate: info =>
+      path.resolve(info.absoluteResourcePath),
   },
 
 
@@ -52,15 +54,18 @@ const config = {
           presets: [
             // A Babel preset that can automatically determine the Babel plugins and polyfills
             // https://github.com/babel/babel-preset-env
-            ['env', {
-              targets: {
-                browsers: pkg.browserslist,
-                uglify: true,
+            [
+              'env',
+              {
+                targets: {
+                  browsers: pkg.browserslist,
+                  uglify: true,
+                },
+                modules: false,
+                useBuiltIns: false,
+                debug: false,
               },
-              modules: false,
-              useBuiltIns: false,
-              debug: false,
-            }],
+            ],
             // Experimental ECMAScript proposals
             // https://babeljs.io/docs/plugins/#presets-stage-x-experimental-presets-
             'stage-2',
@@ -69,15 +74,15 @@ const config = {
             'react',
             // Optimize React code for the production build
             // https://github.com/thejameskyle/babel-react-optimize
-            ...isDebug ? [] : ['react-optimize'],
+            ...(isDebug ? [] : ['react-optimize']),
           ],
           plugins: [
             // Adds component stack to warning messages
             // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-source
-            ...isDebug ? ['transform-react-jsx-source'] : [],
+            ...(isDebug ? ['transform-react-jsx-source'] : []),
             // Adds __self attribute to JSX which React will use for some warnings
             // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-self
-            ...isDebug ? ['transform-react-jsx-self'] : [],
+            ...(isDebug ? ['transform-react-jsx-self'] : []),
           ],
         },
       },
@@ -167,6 +172,51 @@ const config = {
   devtool: isDebug ? 'cheap-module-inline-source-map' : 'source-map',
 }
 
+const styleRules = [
+  // Process external/third-party styles
+  {
+    loader: 'css-loader',
+    options: {
+      sourceMap: isDebug,
+      minimize: !isDebug,
+      discardComments: { removeAll: true },
+    },
+  },
+
+  // Process internal/project styles (from src folder)
+  {
+    loader: 'css-loader',
+    options: {
+      // CSS Loader https://github.com/webpack/css-loader
+      importLoaders: 1,
+      sourceMap: isDebug,
+      // CSS Modules https://github.com/css-modules/css-modules
+      modules: false,
+      localIdentName: isDebug ? '[name]-[local]-[hash:base64:5]' : '[hash:base64:5]',
+      // CSS Nano http://cssnano.co/options/
+      minimize: !isDebug,
+      discardComments: { removeAll: true },
+    },
+  },
+
+  // Apply PostCSS plugins including autoprefixer
+  {
+    loader: 'postcss-loader',
+    options: {
+      config: {
+        path: './tools/postcss.config.js',
+      },
+    },
+  },
+
+  // Compile Sass to CSS
+  // https://github.com/webpack-contrib/sass-loader
+  // Install dependencies before uncommenting: yarn add --dev sass-loader node-sass
+  {
+    loader: 'sass-loader',
+  },
+]
+
 const clientConfig = {
   ...config,
 
@@ -184,59 +234,54 @@ const clientConfig = {
       // Rules for Style Sheets
       {
         test: reStyle,
-        rules: [
-          // Convert CSS into JS module
-          {
-            issuer: { not: [reStyle] },
-            use: 'style-loader',
-          },
-
-          // Process external/third-party styles
-          {
-            exclude: path.resolve(__dirname, '../src'),
-            loader: 'css-loader',
-            options: {
-              sourceMap: isDebug,
-              minimize: !isDebug,
-              discardComments: { removeAll: true },
+        rules: isDebug
+          ? [
+            // Convert CSS into JS module
+            {
+              issuer: { not: [reStyle] },
+              use: 'style-loader',
             },
-          },
-
-          // Process internal/project styles (from src folder)
-          {
-            include: path.resolve(__dirname, '../src'),
-            loader: 'css-loader',
-            options: {
-              // CSS Loader https://github.com/webpack/css-loader
-              importLoaders: 1,
-              sourceMap: isDebug,
-              // CSS Modules https://github.com/css-modules/css-modules
-              modules: false,
-              localIdentName: isDebug ? '[name]-[local]-[hash:base64:5]' : '[hash:base64:5]',
-              // CSS Nano http://cssnano.co/options/
-              minimize: !isDebug,
-              discardComments: { removeAll: true },
+            {
+              exclude: path.resolve(__dirname, '../src'),
+              ...styleRules[0],
             },
-          },
-
-          // Apply PostCSS plugins including autoprefixer
-          {
-            loader: 'postcss-loader',
-            options: {
-              config: {
-                path: './tools/postcss.config.js',
-              },
+            {
+              include: path.resolve(__dirname, '../src'),
+              ...styleRules[1],
             },
-          },
+            styleRules[2],
+            {
+              ...styleRules[3],
+              test: /\.scss$/,
+            },
+          ]
+          : [
+            {
+              exclude: path.resolve(__dirname, '../src'),
+              use: extractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: [styleRules[0], styleRules[2]],
+              }),
+            },
 
-          // Compile Sass to CSS
-          // https://github.com/webpack-contrib/sass-loader
-          // Install dependencies before uncommenting: yarn add --dev sass-loader node-sass
-          {
-            test: /\.scss$/,
-            loader: 'sass-loader',
-          },
-        ],
+            {
+              test: /\.css/,
+              include: path.resolve(__dirname, '../src'),
+              use: extractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: [styleRules[1], styleRules[2]],
+              }),
+            },
+
+            {
+              test: /\.scss$/,
+              include: path.resolve(__dirname, '../src'),
+              use: extractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: [styleRules[1], styleRules[2], styleRules[3]],
+              }),
+            },
+          ],
       },
       {
         test: /\.hbs$/,
@@ -256,10 +301,41 @@ const clientConfig = {
       alwaysWriteToDisk: true,
       filename: '../../templates/html.hbs',
       template: 'src/core/templates/html.hbs',
-      minify: !isDebug,
-      cache: isDebug,
-      hash: isDebug,
     }),
+    // Move modules that occur in multiple entry chunks to a new entry chunk (the commons chunk).
+    // https://webpack.js.org/plugins/commons-chunk-plugin/
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: module => /node_modules/.test(module.resource),
+    }),
+
+    ...(isDebug
+      ? []
+      : [
+        extractTextPlugin,
+        // Decrease script evaluation time
+        // https://github.com/webpack/webpack/blob/master/examples/scope-hoisting/README.md
+        new webpack.optimize.ModuleConcatenationPlugin(),
+
+        // Minimize all JavaScript output of chunks
+        // https://github.com/mishoo/UglifyJS2#compressor-options
+        new webpack.optimize.UglifyJsPlugin({
+          sourceMap: true,
+          compress: {
+            screw_ie8: true, // React doesn't support IE8
+            warnings: isVerbose,
+            unused: true,
+            dead_code: true,
+          },
+          mangle: {
+            screw_ie8: true,
+          },
+          output: {
+            comments: false,
+            screw_ie8: true,
+          },
+        }),
+      ]),
   ],
 
   // Some libraries import Node modules but don't use them in the browser.
@@ -331,6 +407,14 @@ const serverConfig = {
       'process.env.NODE_ENV': isDebug ? '"development"' : '"production"',
       'process.env.BROWSER': false,
       __DEV__: isDebug,
+    }),
+
+    // Adds a banner to the top of each generated chunk
+    // https://webpack.js.org/plugins/banner-plugin/
+    new webpack.BannerPlugin({
+      banner: 'require("source-map-support").install();',
+      raw: true,
+      entryOnly: false,
     }),
   ],
 

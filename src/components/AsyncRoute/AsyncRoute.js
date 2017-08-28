@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+import { DEFAULT_CONTEXT } from '../../core/constants'
 
 class AsyncRoute extends React.Component {
   static propTypes = {
@@ -9,19 +10,29 @@ class AsyncRoute extends React.Component {
   };
 
   static defaultProps = {
-    loadData: () => ({}),
+    loadData: null,
   };
 
   state = {};
 
   async componentWillMount() {
     const { loadData, store, match } = this.props
+
+    if (!loadData) {
+      return
+    }
+
     const context = await loadData({
       ...match,
       store,
     })
 
-    this.setState({ context })
+    this.setState({
+      context: {
+        ...DEFAULT_CONTEXT,
+        ...context,
+      },
+    })
   }
 
   render() {
@@ -33,16 +44,16 @@ class AsyncRoute extends React.Component {
           <Helmet>
             {context.title && [
               <title key={0}>{context.title}</title>,
-              <meta key={1} property="title" content="{{title}}" />,
-              <meta key={2} property="og:title" content="{{title}}" />,
+              <meta key={1} name="title" content={context.title} />,
+              <meta key={2} property="og:title" content={context.title} />,
             ]}
             {context.image && [
-              <meta key={3} property="image" content="{{image}}" />,
-              <meta key={4} property="og:image" content="{{image}}" />,
+              <meta key={3} name="image" content={context.image} />,
+              <meta key={4} property="og:image" content={context.image} />,
             ]}
             {context.description && [
-              <meta key={5} property="description" content="{{description}}" />,
-              <meta key={6} property="og:description" content="{{description}}" />,
+              <meta key={5} name="description" content={context.description} />,
+              <meta key={6} property="og:description" content={context.description} />,
             ]}
           </Helmet>
         }
@@ -63,7 +74,7 @@ const AsyncRouteConnect = props => (
   />
 )
 
-AsyncRouteConnect.displayName = 'Component'
+AsyncRouteConnect.displayName = 'AsyncRouteConnect'
 
 export default AsyncRouteConnect
 

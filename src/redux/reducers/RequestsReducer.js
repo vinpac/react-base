@@ -5,7 +5,7 @@ const RequestsReducer = (state = initialState, action = {}) => {
     case 'SET':
       return {
         ...state,
-        ...action.payload,
+        payload: action.payload,
       }
 
     default:

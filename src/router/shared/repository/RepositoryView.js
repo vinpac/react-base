@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import img from './img.jpg'
 
-class RepositoryItem extends React.Component {
+class RepositoryView extends React.Component {
   render() {
-    const { data } = this.props
+    const { data, children } = this.props
 
     return (
       <div>
@@ -19,7 +20,7 @@ class RepositoryItem extends React.Component {
 }
 
 const mapStateToProps = ({ requests }) => ({
-  data: requests.data,
+  data: requests.payload ? requests.payload.data : null,
 })
 
-export default connect(mapStateToProps)(RepositoryItem)
+export default connect(mapStateToProps)(RepositoryView)

@@ -1,8 +1,8 @@
+import fetch from 'isomorphic-fetch'
 import React from 'react'
 import Layout from '../../components/Layout/Layout'
-import RepositoryView from './repository/RepositoryView'
 import HomeView from './home/HomeView'
-import fetch from 'isomorphic-fetch'
+import RepositoryView from './repository/RepositoryView'
 
 
 export default [
@@ -13,6 +13,17 @@ export default [
       return (
         <Layout>
           <HomeView />
+        </Layout>
+      )
+    },
+  },
+  {
+    path: '/r/:username',
+    exact: true,
+    render() {
+      return (
+        <Layout>
+          <h2>Teste</h2>
         </Layout>
       )
     },

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import 'font-awesome/css/font-awesome.css'
-import 'normalize.css'
+import '../App/styles/external/normalize.css'
 import '../App/App.scss'
 import Toolbar from './components/Toolbar/Toolbar'
 

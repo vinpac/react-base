@@ -3,14 +3,18 @@
   <head>
     <meta charset="utf-8">
     <link rel="shortcut icon" href="/assets/favicon.ico?v=004" type="image/x-icon" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
     <title>{{title}}</title>
-    <meta property="title" content="{{title}}" />
-    <meta property="og:title" content="{{title}}" />
-    <meta property="image" content="{{image}}" />
-    <meta property="og:image" content="{{image}}" />
-    <meta property="description" content="{{description}}" />
-    <meta property="og:description" content="{{description}}" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
+    <meta name="title" content="{{title}}" data-react-helmet="true" />
+    <meta property="og:title" content="{{title}}" data-react-helmet="true" />
+    <meta name="image" content="{{image}}" data-react-helmet="true" />
+    <meta property="og:image" content="{{image}}" data-react-helmet="true" />
+    <meta name="description" content="{{description}}" data-react-helmet="true" />
+    <meta property="og:description" content="{{description}}" data-react-helmet="true" />
     <script>
       window.APP_STATE = {{{initialState}}};
     </script>
