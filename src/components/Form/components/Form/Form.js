@@ -17,12 +17,9 @@ class Form extends React.Component {
     onSubmit: PropTypes.func,
     // eslint-disable-next-line react/forbid-prop-types
     initialValues: PropTypes.object,
-    component: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.func,
-    ]),
+    component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
     className: PropTypes.string,
-  };
+  }
 
   static defaultProps = {
     onChange: null,
@@ -30,11 +27,12 @@ class Form extends React.Component {
     initialValues: {},
     component: 'form',
     className: '',
-  };
+  }
 
   static childContextTypes = {
+    formSectionPath: PropTypes.string,
     registerField: PropTypes.func.isRequired,
-  };
+  }
 
   constructor(props) {
     super(props)
@@ -49,57 +47,68 @@ class Form extends React.Component {
 
   getChildContext() {
     return {
+      formSectionPath: '',
       registerField: this.registerField,
     }
   }
 
-  getFieldsState() {
-    const values = {}
-    const errors = {}
-    const asyncErrors = {}
-    let hasError = false
+  getFieldsState(
+    {
+      value: includeValues = true,
+      errors: includeErrors = true,
+      asyncErrors: includeAsyncErrors = true,
+      meta: includeMeta = true,
+    } = {},
+  ) {
+    const output = { hasError: false }
 
-    this.forEach((field, path) => {
-      setByPath(path, values, field.value)
+    if (includeValues) output.values = {}
+    if (includeErrors) output.errors = {}
+    if (includeAsyncErrors) output.asyncErrors = {}
+    if (includeMeta) output.meta = {}
 
-      if (field.error) {
-        hasError = true
-        setByPath(path, errors, field.error)
+    this.forEach(({ value, error, asyncError, ...fieldMeta }, path) => {
+      if (includeValues) setByPath(path, output.values, value)
+      if (includeMeta) setByPath(path, output.meta, fieldMeta)
+
+      if (error) {
+        output.hasError = true
+        if (includeErrors) setByPath(path, output.errors, error)
       }
 
-      if (field.asyncError) {
-        hasError = true
-        setByPath(path, asyncErrors, field.asyncError)
+      if (asyncError) {
+        output.hasError = true
+        if (includeAsyncErrors) setByPath(path, output.asyncErrors, asyncError)
       }
     })
 
-    return {
-      values,
-      errors,
-      asyncErrors,
-      hasError,
-    }
+    return output
   }
+
 
   reset = () => {
-    const { fields } = this.state
-
-    Object.keys(fields).forEach((fieldName) => {
-      this.shouldUpdate[fieldName] = true
-      fields[fieldName] = this.initialFieldStates[fieldName]
+    const fields = {}
+    this.forEach((field) => {
+      setByPath(
+        field.path,
+        fields,
+        { ...getByPath(field.path, this.initialFieldStates) },
+        { [PARENT_INDICATOR_KEY]: true },
+      )
+      setByPath(field.path, this.shouldUpdate, true)
     })
 
-    this.setState({ fields, submited: false })
+    this.setState({ fields }, this.handleChange)
   }
 
-  handleChange = () => this.props.onChange &&
-    this.props.onChange(this.getFieldsState(), this)
+  handleChange = () =>
+    this.props.onChange && this.props.onChange(this.getFieldsState(), this)
 
   handleSubmit = (event) => {
     const { onSubmit } = this.props
 
-    this.forEach((field, fieldName) => {
-      this.shouldUpdate[fieldName] = true
+    this.forEach((field) => {
+      setByPath(field.path, this.shouldUpdate, true)
     })
 
     this.setState({
@@ -128,12 +137,9 @@ class Form extends React.Component {
 
   registerField = (path, intialState, ref) => {
     const { initialValues } = this.props
-    const parent = getParentByPath(
-      path,
-      this.state.fields,
-      1,
-      { [PARENT_INDICATOR_KEY]: true },
-    )
+    const parent = getParentByPath(path, this.state.fields, 1, {
+      [PARENT_INDICATOR_KEY]: true,
+    })
     const fieldName = getLastFieldName(path)
 
     if (!fieldName) {
@@ -153,7 +159,8 @@ class Form extends React.Component {
     }
 
     clearTimeout(this.setStateTimeout)
-    this.initialFieldStates[fieldName] = parent[fieldName]
+    setByPath(path, this.initialFieldStates, { ...parent[fieldName] })
+
     this.setStateTimeout = setTimeout(() => {
       this.setState({ fields: this.state.fields }, this.handleChange)
     }, 50)
@@ -185,22 +192,26 @@ class Form extends React.Component {
         return false
       },
     }
-  };
+  }
 
   updateFieldState(path, changes, fn) {
     const currentState = getByPath(path, this.state.fields)
     const newState = {}
-    let shouldUpdateState = false;
+    let shouldUpdateState = false
 
-    ['value', 'error', 'asyncError', 'asyncValidating', 'isFocused', 'touched']
-      .forEach((key) => {
-        if (has(changes, key) &&
-          currentState[key] !== changes[key]
-        ) {
-          shouldUpdateState = true
-          newState[key] = changes[key]
-        }
-      })
+    ;[
+      'value',
+      'error',
+      'asyncError',
+      'asyncValidating',
+      'isFocused',
+      'touched',
+    ].forEach((key) => {
+      if (has(changes, key) && currentState[key] !== changes[key]) {
+        shouldUpdateState = true
+        newState[key] = changes[key]
+      }
+    })
 
     if (shouldUpdateState) {
       setByPath(path, this.state.fields, {
@@ -208,15 +219,18 @@ class Form extends React.Component {
         ...newState,
       })
 
-      this.setState({
-        fields: this.state.fields,
-      }, () => {
-        this.handleChange()
+      this.setState(
+        {
+          fields: this.state.fields,
+        },
+        () => {
+          this.handleChange()
 
-        if (fn) {
-          fn()
-        }
-      })
+          if (fn) {
+            fn()
+          }
+        },
+      )
     }
   }
 

@@ -8,6 +8,10 @@
   }
 }
 
+.btn--theme-outline-primary {
+  @include button-outline-variant($color-primary);
+}
+
 .btn--theme-primary {
   @include button-variant(#fff, $color-primary);
 }

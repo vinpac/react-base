@@ -1,0 +1,79 @@
+@import '../App/styles/variables';
+
+$default-size: 12px;
+$duration: 700ms;
+
+@mixin preloader-size($size) {
+  height: $size;
+  width: $size * 3 + $size / 2;
+
+  .preloader__item {
+    width: $size;
+    height: $size;
+    margin-left: $size / 4;
+    border-radius: $size / 4;
+  }
+}
+
+// sizes
+
+.preloader--size-default {
+  @include preloader-size($default-size);
+}
+
+.preloader--size-medium {
+  @include preloader-size($default-size * 1.5);
+}
+
+.preloader--size-large {
+  @include preloader-size($default-size * 3);
+}
+
+.preloader {
+  display: inline-block;
+  line-height: 0;
+}
+
+.preloader__item {
+  background: $text-muted-dark;
+  display: inline-block;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.preloader__item1 {
+  animation: pulse $duration ease-in-out 0s infinite normal;
+}
+
+.preloader__item2 {
+  animation: pulse $duration ease-in-out ($duration / 3) infinite normal;
+}
+
+.preloader__item3 {
+  animation: pulse $duration ease-in-out ($duration / 1.5) infinite normal;
+}
+
+// theme
+.preloader--theme-light .preloader__item {
+  background: #fff;
+}
+
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  80% {
+    transform: scale(.8);
+    opacity: .5;
+  }
+
+  100% {
+    transform: scale(.8);
+    opacity: .5;
+  }
+}

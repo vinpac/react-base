@@ -22,6 +22,8 @@ class Field extends React.Component {
     valueKey: PropTypes.string,
     defaultValue: PropTypes.any, // eslint-disable-line react/forbid-prop-types
     type: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
   };
 
   static defaultProps = {
@@ -30,6 +32,8 @@ class Field extends React.Component {
     validate: undefined,
     asyncValidate: undefined,
     valueKey: 'value',
+    onFocus: undefined,
+    onBlur: undefined,
   };
 
   static contextTypes = {
@@ -166,7 +170,11 @@ class Field extends React.Component {
     }
   }
 
-  handleFocus = () => {
+  handleFocus = (event) => {
+    if (this.props.onFocus) {
+      this.props.onFocus(event)
+    }
+
     const updateState = () => this.updateFieldState({ isFocused: true })
 
     // Fix events going crazy
@@ -180,7 +188,11 @@ class Field extends React.Component {
   }
 
 
-  handleBlur = () => {
+  handleBlur = (event) => {
+    if (this.props.onBlur) {
+      this.props.onBlur(event)
+    }
+
     const updateState = () => {
       this.updateFieldState(
         { isFocused: false, touched: true },
@@ -217,22 +229,27 @@ class Field extends React.Component {
       onChange: this.handleChange,
       onFocus: this.handleFocus,
       onBlur: this.handleBlur,
-      [isCheckbox ? 'checked' : valueKey]: fieldState.value,
     }
 
     if (typeof Component === 'string') {
+      // set value
+      input[isCheckbox ? 'checked' : valueKey] = fieldState.value
+
       return (
         <Component
-          {...input}
           {...props}
+          {...input}
         />
       )
     }
 
+    // set value
+    input[Component.formKeyName || valueKey] = fieldState.value
+
     return (
       <Component
         {...props}
-        input={input}
+        {...(Component.formPassPropsAsInput ? input : { input })}
         meta={{
           ...fieldState,
           ...this.getFormMeta(),

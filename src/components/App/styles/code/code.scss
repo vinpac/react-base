@@ -1,9 +1,29 @@
-.code {
+@import '../variables';
+
+.code__body {
   background: #F7F9FA;
   border: 1px solid #e6e8eb;
   overflow: visible;
   font-family: monospace;
   font-size: 16px;
+  overflow-x: auto;
+}
+
+.code__header {
+  background: linear-gradient(0deg, rgba(#000, .05), #fff);
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: $border-radius $border-radius 0 0;
+
+  + .code__body {
+    border-top-width: 0;
+  }
+}
+
+.code__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: $font-weight-semibold;
 }
 
 .code__line {
@@ -11,6 +31,7 @@
   overflow: visible;
   white-space: break-word;
   min-height: 30px;
+  position: relative;
 
   &::before {
     content: attr(data-code-line-number);
@@ -19,15 +40,13 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    display: inline-block;
+    display: block;
     float: left;
-    width: 100px;
+    height: 100%;
     max-width: 100px;
-    margin-left: -116px;
     margin-right: 16px;
     font-weight: normal;
-    background-color: transparent;
     margin-top: 3px;
-    color: #c1c7cd;
+    color: #B1B7BD;
   }
 }

@@ -54,6 +54,11 @@ export function getFirstFieldName(path) {
   return index === -1 ? path : path.slice(0, index)
 }
 
-export function setByPath(path, fromObj, newValue) {
-  getParentByPath(path, fromObj, 1)[getLastFieldName(path)] = newValue
+export function setByPath(path, fromObj, newValue, initialParentValue) {
+  getParentByPath(
+    path,
+    fromObj,
+    1,
+    initialParentValue,
+  )[getLastFieldName(path)] = newValue
 }
