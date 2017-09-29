@@ -1,0 +1,33 @@
+@import '../variables';
+@import './variables';
+
+.inputGroup {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+.inputGroup__addon {
+  border-radius: $border-radius;
+  border: 1px solid $form-input-border-color;
+  background: $form-input-bg;
+  color: $text-muted-dark;
+  font-size: 16px;
+  padding: $form-input-padding;
+
+  + .formInput {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.inputGroup--size--large .inputGroup__addon {
+  font-size: 20px;
+  padding: 0.5rem 0.85rem;
+}
+
+.inputGroup .inputGroup__addon:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right-width: 0;
+}

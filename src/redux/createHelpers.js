@@ -1,4 +1,6 @@
-function createGraphqlRequest(fetch) {
+import fetch from 'isomorphic-fetch'
+
+function createGraphqlRequest() {
   return async function graphqlRequest(query, variables) {
     const fetchConfig = {
       method: 'post',
@@ -17,6 +19,6 @@ function createGraphqlRequest(fetch) {
 
 export default function createHelpers() {
   return {
-    graphqlRequest: createGraphqlRequest(fetch),
+    graphqlRequest: createGraphqlRequest(),
   }
 }

@@ -1,10 +1,14 @@
-import express from 'express'
 import bodyParser from 'body-parser'
-import path from 'path'
 import cookieParser from 'cookie-parser'
+import express from 'express'
 import expressHandlebars from 'express-handlebars'
+import path from 'path'
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
 import * as config from './core/config'
+import { resolveContext } from './core/constants'
 import * as router from './router'
+import ErrorView from './router/shared/error/ErrorView'
 
 
 const app = express()
@@ -30,8 +34,29 @@ app.engine('hbs', expressHandlebars({
   layoutsDir: path.resolve(__dirname, 'templates'),
 }))
 
-app.get('*', (req, res, next) => {
-  router.resolve(req, res, next)
+app.use((req, res, next) => router.apiMiddleware(req, res, next))
+
+app.get('*', async (req, res, next) => {
+  try {
+    await router.resolve(req, res, next)
+  } catch (error) {
+    next(error)
+  }
+})
+
+// eslint-disable-next-line no-unused-vars
+app.use((error, req, res, next) => {
+  res.status(error.status || 500)
+
+  const body = ReactDOMServer.renderToString(
+    <ErrorView error={error} />,
+  )
+
+  res.render('index', {
+    ...resolveContext(),
+    content: body,
+    initialState: {},
+  })
 })
 
 if (!module.hot) {

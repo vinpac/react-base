@@ -1,3 +1,112 @@
-.btn-primary {
+@import '../variables';
+
+.btn {
+  transition: transform .1s;
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.btn--theme-primary {
   @include button-variant(#fff, $color-primary);
+}
+
+.btn--theme-accent {
+  @include button-variant(#fff, $color-accent);
+}
+
+.btn--theme-white {
+  background: #fff;
+  color: lighten($text-base, 10%);
+  border-color: #ccc;
+
+  &:hover,
+  &:focus {
+    border-color: #bbb;
+    color: $text-base;
+  }
+
+  &:focus,
+  &.focus {
+    @include button-box-shadow(#ccc);
+  }
+}
+
+.btn--theme-default {
+  background: #fff linear-gradient(0deg, rgba(#000, .05), #fff);
+  color: lighten($text-base, 10%);
+  border-color: #ccc;
+
+  &:hover,
+  &:focus {
+    border-color: #bbb;
+    color: $text-base;
+    background: #fff linear-gradient(0deg, rgba(#000, .06), rgba(#000, .02));
+  }
+
+  &:active {
+    background: #fff linear-gradient(0deg, rgba(#000, .1), rgba(#000, .04));
+  }
+
+  &:focus,
+  &.focus {
+    @include button-box-shadow(#ccc);
+  }
+}
+
+.btn--text-white {
+  background: none;
+  color: rgba(#fff, .8);
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+    color: #fff;
+  }
+}
+
+.btn--text-base {
+  @include button-text($text-base);
+}
+
+.btn--text-primary {
+  @include button-text($color-primary);
+}
+
+.btn--text-accent {
+  @include button-text($color-accent);
+}
+
+.btn--text-muted {
+  @include button-text($text-muted-dark);
+}
+
+.btn--text-muted-dark {
+  @include button-text($text-muted-dark);
+}
+
+.btn--text-link {
+  @include button-text($link-color);
+}
+
+
+.btn--size-small {
+  font-size: 14px;
+  padding: .313rem .5rem;
+}
+
+.btn--size-medium {
+  font-size: 18px;
+  padding: .625rem .9375rem;
+}
+
+.btn--size-large {
+  font-size: 20px;
+  padding: 0.719rem 1.15rem;
+}
+
+.btn--size-x-large {
+  font-size: 20px;
+  padding: 0.844rem 1.3rem;
 }

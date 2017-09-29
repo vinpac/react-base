@@ -1,0 +1,90 @@
+@import 'mixins/text-truncate';
+@import 'mixins/text';
+
+.font--size-small {
+  font-size: $font-size-small;
+}
+
+.font--size-medium {
+  font-size: $font-size-medium;
+}
+
+.font--size-large {
+  font-size: $font-size-large;
+}
+
+@include text-variant('.text--color-light', rgba(#fff, 0.8))
+@include text-variant('.text--color-primary', $color-primary)
+@include text-variant('.text--color-accent', $color-accent)
+@include text-variant('.text--color-success', $color-success)
+@include text-variant('.text--color-white', #fff)
+@include text-variant('.text--muted', $text-muted)
+@include text-variant('.text--muted-dark', $text-muted-dark)
+
+// Type display classes
+.display-1 {
+  font-size: 6rem;
+  font-weight: $display-default-weight;
+  line-height: $display-line-height;
+}
+
+.display-2 {
+  font-size: 5.5rem;
+  font-weight: $display-default-weight;
+  line-height: $display-line-height;
+}
+
+.display-3 {
+  font-size: 4.5rem;
+  font-weight: $display-default-weight;
+  line-height: $display-line-height;
+}
+
+.display-4 {
+  font-size: 3.5rem;
+  font-weight: $display-default-weight;
+  line-height: $display-line-height;
+}
+
+.display-5 {
+  font-size: 3rem;
+  font-weight: $display-default-weight;
+  line-height: $display-line-height;
+}
+
+// Alignment
+
+.text-justify  { text-align: justify !important; }
+.text-nowrap   { white-space: nowrap !important; }
+.text-truncate { @include text-truncate; }
+
+// Responsive alignment
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  @include media-breakpoint-up($breakpoint) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+    .text#{$infix}--left   { text-align: left !important; }
+    .text#{$infix}--right  { text-align: right !important; }
+    .text#{$infix}--center { text-align: center !important; }
+  }
+}
+
+// Transformation
+
+.text--lowercase  { text-transform: lowercase !important; }
+.text--uppercase  { text-transform: uppercase !important; }
+.text--capitalize { text-transform: capitalize !important; }
+
+
+// Weight and italics
+
+.font--weight-light  { font-weight: $font-weight-light !important; }
+.font--weight-normal { font-weight: $font-weight-normal !important; }
+.font--weight-semibold   { font-weight: $font-weight-semibold !important; }
+.font--weight-bold   { font-weight: $font-weight-bold !important; }
+.font--italic        { font-style: italic !important; }
+
+.text--line-height {
+  line-height: 1.5;
+}

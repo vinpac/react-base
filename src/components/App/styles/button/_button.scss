@@ -96,13 +96,13 @@ fieldset[disabled] a.btn {
 // Block button
 //
 
-.btn-block {
+.btn--block {
   display: block;
   width: 100%;
 }
 
 // Vertically space out multiple block buttons
-.btn-block + .btn-block {
+.btn--block + .btn--block {
   margin-top: $btn-block-spacing-y;
 }
 
@@ -110,7 +110,7 @@ fieldset[disabled] a.btn {
 input[type="submit"],
 input[type="reset"],
 input[type="button"] {
-  &.btn-block {
+  &.btn--block {
     width: 100%;
   }
 }

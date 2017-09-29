@@ -1,5 +1,4 @@
 // Margin
-@import 'variables';
 @import '../grid/breakpoints';
 
 @each $breakpoint in map-keys($grid-breakpoints) {
@@ -42,8 +41,38 @@
   }
 }
 
+.blockSpacer {
+  padding: 2rem;
+}
 
-.view-spacer {
+.viewSpacer {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.viewSpacer--medium {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.viewSpacer--large {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+.pad--h-0 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.aspectRatio {
+  position: relative;
+}
+
+.aspectRatio__body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }

@@ -4,7 +4,6 @@ import browserSync from 'browser-sync'
 import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
-import createLaunchEditorMiddleware from 'react-error-overlay/middleware'
 import webpackConfig from './webpack.config'
 import run, { format } from './run'
 import clean from './clean'
@@ -58,7 +57,6 @@ let server
 async function start() {
   if (server) return server
   server = express()
-  server.use(createLaunchEditorMiddleware())
   server.use(express.static(path.resolve(__dirname, '../public')))
 
   // Configure client-side hot module replacement
@@ -151,7 +149,7 @@ async function start() {
   server.use((req, res) => {
     appPromise
       .then(() => app.handle(req, res))
-      .catch(error => console.error(error))
+      .catch(error => console.log(error)) // eslint-disable-line no-console
   })
 
   function checkForUpdate(fromUpdate) {
@@ -223,10 +221,11 @@ async function start() {
     browserSync.create().init(
       {
         // https://www.browsersync.io/docs/options
+        notify: false,
         server: 'src/server.js',
         middleware: [server],
         open: !process.argv.includes('--silent'),
-        ...(isDebug ? {} : { notify: false, ui: false }),
+        ...(isDebug ? {} : { ui: false }),
       },
       (error, bs) => (error ? reject(error) : resolve(bs)),
     ),

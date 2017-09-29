@@ -1,27 +1,74 @@
 // Primary colors
-$color-primary: #0069FF;
+$color-primary: #F17922;
 $color-primary-dark: darken($color-primary, 10%);
-$color-accent: #0077F5;
+$color-accent: #0D2748;
+
+// Spacing
+$spacer: 1rem !default;
+$spacers: (
+  0: 0,
+  1: ($spacer * .25),
+  2: ($spacer * .5),
+  3: $spacer,
+  4: ($spacer * 1.5),
+  5: ($spacer * 3)
+) !default;
 
 // Alternative colors
 $color-info: #FFC145;
-$color-success: #24B47E;
+$color-success: #009E1B;
 $color-warning: #ff5252;
+$color-error: #ff5252;
 
 // Text colors
-$text-base: #444;
+$text-base: #353437;
 $text-muted: #7E828B;
 $text-muted-dark: #5A606E;
 $text-anchor: $color-primary;
 
+// Body
+$body-bg: #fff;
+$body-color: $text-base;
+
 // Fonts
-$font-size-base: 16px;
+$font-size-base: 1rem;
+$font-weight-base: normal;
 $font-line-height-base: 1.5;
 $font-family-base: Roboto, Helvetica, Arial, sans-serif;
-$font-weight-normal: normal;
+$line-height-base: 1.5;
+
+$font-size-small: .875rem !default;
+$font-size-medium: 1.125rem !default;
+$font-size-large: 1.25rem !default;
+
+$paragraph-margin-bottom: 1rem !default;
+
+$h1-font-size: 2.5rem !default;
+$h2-font-size: 2rem !default;
+$h3-font-size: 1.75rem !default;
+$h4-font-size: 1.5rem !default;
+$h5-font-size: 1.25rem !default;
+$h6-font-size: 1rem !default;
+
+$headings-margin-bottom: ($spacer / 2) !default;
+$headings-font-family:   inherit !default;
+$headings-font-weight:   500 !default;
+$headings-line-height:   1.25 !default;
+$headings-color:         inherit !default;
+
+
+$display-default-weight: 300;
+$display-line-height:  !default;
+
+$lead-font-size:   1.25rem !default;
+$lead-font-weight: 300 !default;
+
 
 // Font weight
-$font-semibold: 500;
+$font-weight-light: 300;
+$font-weight-normal: normal;
+$font-weight-semibold: 500;
+$font-weight-bold: bold;
 
 
 // Link
@@ -31,4 +78,23 @@ $link-hover-color: darken($link-color, 15%);
 $link-hover-decoration: underline;
 
 // Utils
-$border-radius: 2px;
+$border-radius: 3px;
+$border-width: 1px;
+
+$blockquote-small-color:  #868e96 !default;
+$blockquote-font-size:    ($font-size-base * 1.25) !default;
+
+$mark-padding: .2em !default;
+$mark-bg: #fcf8e3 !default;
+
+$list-inline-padding: 5px !default;
+
+$hr-border-color: rgba(#000,.1) !default;
+$hr-border-width: $border-width !default;
+
+// Tables
+$table-cell-padding:            .75rem !default;
+$table-cell-padding-sm:         .3rem !default;
+
+// Components
+$toolbar-height: 56px;

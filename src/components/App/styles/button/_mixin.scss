@@ -1,3 +1,7 @@
+@mixin button-box-shadow($color) {
+  box-shadow: 0 0 0 3px rgba($color, .5);
+}
+
 @mixin button-variant($color, $background, $border: $background) {
   $active-background: darken($background, 5%);
   $active-border: darken($border, 8%);
@@ -16,7 +20,7 @@
   &:focus,
   &.focus {
     // Avoid using mixin so we can pass custom focus shadow properly
-    box-shadow: 0 0 0 3px rgba($border, .5);
+    @include button-box-shadow($border);
   }
 
   // Disabled comes first so active can properly restyle
@@ -65,6 +69,23 @@
     color: $color-hover;
     background-color: $color;
     border-color: $color;
+  }
+}
+
+@mixin button-text($color, $event: darken($color, 10%)) {
+  background: none;
+  color: $color;
+
+  &:hover,
+  &:focus {
+    color: $color;
+    text-decoration: none;
+  }
+
+  &:focus,
+  &.focus {
+    // Avoid using mixin so we can pass custom focus shadow properly
+    @include button-box-shadow($color);
   }
 }
 

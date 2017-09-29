@@ -1,0 +1,33 @@
+.code {
+  background: #F7F9FA;
+  border: 1px solid #e6e8eb;
+  overflow: visible;
+  font-family: monospace;
+  font-size: 16px;
+}
+
+.code__line {
+  padding: 4px 8px 3px;
+  overflow: visible;
+  white-space: break-word;
+  min-height: 30px;
+
+  &::before {
+    content: attr(data-code-line-number);
+    font-size: 13px;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    float: left;
+    width: 100px;
+    max-width: 100px;
+    margin-left: -116px;
+    margin-right: 16px;
+    font-weight: normal;
+    background-color: transparent;
+    margin-top: 3px;
+    color: #c1c7cd;
+  }
+}

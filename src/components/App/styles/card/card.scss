@@ -1,0 +1,19 @@
+.card {
+  background: #fff;
+  border-radius: $border-radius;
+  border: 1px solid rgba(#000, 0.1);
+  background-clip: padding-box;
+}
+
+.card__block {
+  padding: 16px;
+}
+
+.card__block--medium {
+  padding: 20px;
+}
+
+
+.card__block--large {
+  padding: 28px;
+}

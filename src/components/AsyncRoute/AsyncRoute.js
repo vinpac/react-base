@@ -1,37 +1,46 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import { Route } from 'react-router-dom'
+import queryString from 'query-string'
+import React from 'react'
 import { Helmet } from 'react-helmet'
-import { DEFAULT_CONTEXT } from '../../core/constants'
+import { Route } from 'react-router-dom'
+import { resolveContext } from '../../core/constants'
 
 class AsyncRoute extends React.Component {
   static propTypes = {
     loadData: PropTypes.func,
+    location: Route.propTypes.location,
   };
 
   static defaultProps = {
+    location: {},
     loadData: null,
   };
 
   state = {};
 
-  async componentWillMount() {
-    const { loadData, store, match } = this.props
+  componentWillMount() {
+    this.update(this.props)
+  }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location.search !== nextProps.location.search) {
+      this.update(nextProps)
+    }
+  }
+
+
+  async update({ loadData, store, match, location }) {
     if (!loadData) {
       return
     }
-
     const context = await loadData({
       ...match,
+      query: queryString.parse(location.search),
       store,
     })
 
     this.setState({
-      context: {
-        ...DEFAULT_CONTEXT,
-        ...context,
-      },
+      context: resolveContext(context),
     })
   }
 

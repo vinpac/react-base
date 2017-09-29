@@ -1,5 +1,5 @@
-export const DEFAULT_CONTEXT = {
-  title: 'Untitled page',
-  description: 'Lorem ipsum',
-  image: null,
-}
+export const resolveContext = (context = {}) => ({
+  title: context.title || 'React base',
+  description: context.description || 'React base',
+  image: context.image || '',
+})

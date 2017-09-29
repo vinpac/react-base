@@ -1,0 +1,42 @@
+@import '../../../App/styles/variables';
+
+.formGroup {
+  label {
+    margin-bottom: .5rem;
+    display: inline-block;
+  }
+
+  &.warning {
+    label,
+    .formInput,
+    .form__legend, {
+      color: $color-warning;
+    }
+
+    .formInput {
+      border-color: $color-warning;
+    }
+  }
+
+  + .formGroup {
+    margin-top: 1rem;
+  }
+}
+
+.formGroup__subtext {
+  font-size: $font-size-small;
+  margin-top: .5rem;
+  color: $text-muted;
+  display: block;
+}
+
+.formGroup--state-error {
+  .formInput {
+    border-color: $color-error;
+  }
+
+  .formInput,
+  .formGroup__subtext {
+    color: $color-error;
+  }
+}

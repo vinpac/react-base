@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import '../App/styles/external/normalize.css'
-import '../App/App.scss'
-import Toolbar from './components/Toolbar/Toolbar'
 
 class Layout extends React.Component {
   static propTypes = {
@@ -13,8 +10,7 @@ class Layout extends React.Component {
     const { children } = this.props
 
     return (
-      <div className="layout-default">
-        <Toolbar />
+      <div className="layout">
         {React.Children.only(children)}
       </div>
     )

@@ -1,0 +1,109 @@
+@import 'variables';
+
+// Base class
+//
+// Kickstart any navigation component with a set of style resets. Works with
+// `<nav>`s or `<ul>`s.
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav__link {
+  display: block;
+  padding: $nav-link-padding-y $nav-link-padding-x;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+
+  // Disabled state lightens text
+  &.disabled {
+    color: $nav-link-disabled-color;
+  }
+}
+
+
+//
+// Tabs
+//
+
+.nav__tabs {
+  border-bottom: $nav-tabs-border-width solid $nav-tabs-border-color;
+
+  .nav__item {
+    margin-bottom: -$nav-tabs-border-width;
+  }
+
+  .nav__link {
+    border: $nav-tabs-border-width solid transparent;
+    border-top-left-radius: $nav-tabs-border-radius;
+    border-top-right-radius: $nav-tabs-border-radius;
+
+    &:hover,
+    &:focus {
+      border-color: $nav-tabs-link-hover-border-color $nav-tabs-link-hover-border-color $nav-tabs-border-color;
+    }
+
+    &.disabled {
+      color: $nav-link-disabled-color;
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  .nav__link.active,
+  .nav__item.show .nav__link {
+    color: $nav-tabs-link-active-color;
+    background-color: $nav-tabs-link-active-bg;
+    border-color: $nav-tabs-link-active-border-color $nav-tabs-link-active-border-color $nav-tabs-link-active-bg;
+  }
+
+  .dropdown-menu {
+    // Make dropdown border overlap tab border
+    margin-top: -$nav-tabs-border-width;
+    // Remove the top rounded corners here since there is a hard edge above the menu
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
+
+//
+// Justified variants
+//
+
+.nav--fill {
+  .nav__item {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
+
+.nav--justified {
+  .nav__item {
+    flex-basis: 0;
+    flex-grow: 1;
+    text-align: center;
+  }
+}
+
+.nav--vertical {
+  display: block;
+
+  .nav__link {
+    padding: 0;
+    margin-bottom: .3rem;
+  }
+}
+
+.nav__verticalHeader {
+  margin: 0 0 .5rem;
+  font-weight: $font-weight-semibold;
+  font-size: 1rem;
+}

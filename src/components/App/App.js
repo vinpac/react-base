@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
-
+import './styles/external/normalize.css'
+import './App.scss'
 
 const ContextType = {
   // Integrate Redux
